@@ -1,0 +1,120 @@
+import math
+
+# 5.1
+try:
+    a = float(input("Введите число a: "))
+    b = float(input("Введите число b: "))
+    result = a / b
+    print("Результат деления:", result)
+except ZeroDivisionError:
+    print("Ошибка: деление на 0 невозможно.")
+except ValueError:
+    print("Ошибка: Введены некорректные данные (не число).")
+except Exception as e:
+    print(f"Произошла ошибка: {e}")
+
+# 5.2
+a = float(input("Введите число a: "))
+while True:
+    try:
+        b = float(input("Введите число b: "))
+        if b == 0:
+            print("Ошибка: 0 вводить нельзя. Пожалуйста, введите другое число.")
+        else:
+            break  # Выходим из цикла, если b не равно 0
+    except ValueError:
+        print("Ошибка: Некорректный ввод. Введите число.")
+    except Exception as e:
+        print(f"Произошла непредвиденная ошибка: {e}")
+try:
+    result = a / b
+    print("Результат деления:", result)
+except NameError:
+    pass  # Если b так и не ввели корректно, то result не определен.
+except Exception as e:
+    print(f"Произошла ошибка при вычислении результата: {e}")
+
+
+
+# 5.3
+try:
+    x = float(input("Введите число x: "))
+    y = float(input("Введите число y: "))
+    z = float(input("Введите число z: "))
+
+    numerator = x + y + z
+    denominator = (x - y + z) ** 2
+
+    if denominator == 0:
+        raise ZeroDivisionError("Деление на ноль.")
+
+    result = math.sqrt(numerator) / denominator
+    print("Результат:", result)
+
+except ValueError:
+    print("Ошибка: Введены некорректные данные (не число).")
+except ZeroDivisionError as e:
+    print(f"Ошибка: {e}")
+except Exception as e:
+    print(f"Произошла непредвиденная ошибка: {e}")
+
+# 5.4
+try:
+    x = float(input("Введите число x: "))
+    y = float(input("Введите число y: "))
+    z = float(input("Введите число z: "))
+
+    numerator = x + y + z
+    denominator = (x - y + z) ** 2
+
+    if denominator == 0:
+        raise ZeroDivisionError("Деление на ноль.")
+
+    if numerator < 0:
+        raise ValueError("Под корнем отрицательное число.")
+
+    result = math.sqrt(numerator) / denominator
+    print("Результат:", result)
+
+except ValueError as e:
+    print(f"Ошибка: {e}")
+except ZeroDivisionError as e:
+    print(f"Ошибка: {e}")
+except Exception as e:
+    print(f"Произошла непредвиденная ошибка: {e}")
+
+# 5.5
+books = {}
+
+while True:
+    print("\nМеню:")
+    print("1. Создать книгу")
+    print("2. Удалить книгу")
+    print("3. Просмотреть список книг")
+    print("4. Выйти")
+
+    choice = input("Выберите действие: ")
+
+    if choice == '1':
+        title = input("Введите название книги: ")
+        author = input("Введите имя автора: ")
+        books[title] = author
+        print(f"Книга '{title}' добавлена.")
+    elif choice == '2':
+        title = input("Введите название книги для удаления: ")
+        try:
+            del books[title]
+            print(f"Книга '{title}' удалена.")
+        except KeyError:
+            print(f"Ошибка: Книга '{title}' не найдена.")
+    elif choice == '3':
+        if not books:
+            print("Список книг пуст.")
+        else:
+            print("Список книг:")
+            for title, author in books.items():
+                print(f"  - {title}: {author}")
+    elif choice == '4':
+        break
+    else:
+        print("Некорректный выбор. Попробуйте снова.")
