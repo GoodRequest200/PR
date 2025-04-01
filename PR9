@@ -1,0 +1,150 @@
+class Author:
+    """
+    Класс, представляющий автора.
+
+    Args:
+        full_name (str): ФИО автора.
+        country (str): Страна автора.
+    """
+
+    def __init__(self, full_name, country):
+        """
+        Конструктор класса Author.
+
+        Args:
+            full_name (str): ФИО автора.
+            country (str): Страна автора.
+        """
+        self.full_name = full_name
+        self.country = country
+
+    def display_info(self):
+        """
+        Выводит на экран информацию об авторе.
+        """
+        print(f"ФИО: {self.full_name}, Страна: {self.country}")
+
+
+class Book:
+    """
+    Класс, представляющий книгу.
+
+    Attributes:
+        title (str): Название книги.
+        _content (list): Список произведений в книге (приватное поле).
+    """
+
+    def __init__(self, title):
+        """
+        Конструктор класса Book.
+
+        Args:
+            title (str): Название книги.
+        """
+        self.title = title
+        self._content = []
+        print(f"Книга \"{self.title}\" создана")
+
+    def __del__(self):
+        """
+        Деструктор класса Book.
+        """
+        print(f"Книга \"{self.title}\" удалена")
+
+    def add_piece(self, piece_title):
+        """
+        Добавляет произведение в содержание книги.
+
+        Args:
+            piece_title (str): Название произведения.
+        """
+        self._content.append(piece_title)
+
+    def get_piece_count(self):
+        """
+        Возвращает количество произведений в книге.
+
+        Returns:
+            int: Количество произведений.
+        """
+        return len(self._content)
+
+    def display_book_info(self):
+        """
+        Выводит на экран информацию о книге.
+        """
+        print(f"Книга: {self.title}")
+        print("Содержание:")
+        for i, piece in enumerate(self._content):
+            print(f"{i + 1}) {piece}")
+
+
+class BookAuthor(Author, Book):
+    """
+    Класс, представляющий книгу, написанную автором (наследуется от Author и Book).
+    """
+
+    def __init__(self, full_name, country, book_title):
+        """
+        Конструктор класса BookAuthor.
+
+        Args:
+            full_name (str): ФИО автора.
+            country (str): Страна автора.
+            book_title (str): Название книги.
+        """
+        Author.__init__(self, full_name, country)
+        Book.__init__(self, book_title)
+
+    def display_book_author_info(self):
+        """
+        Выводит на экран информацию об авторе, названии книги и содержании книги.
+        """
+        print(f"Автор: {self.full_name}")
+        print(f"Книга: {self.title}")
+        print("Содержание:")
+        for i, piece in enumerate(self._content):  # Исправлено: использование self._content
+            print(f"{i + 1}) {piece}")
+
+
+if __name__ == "__main__":
+    # Создание списка авторов
+    authors = []
+    n = int(input("Введите количество авторов: "))
+
+    for i in range(n):
+        print(f"Введите данные для автора {i + 1}:")
+        full_name = input("ФИО: ")
+        country = input("Страна: ")
+        author = Author(full_name, country)
+        authors.append(author)
+
+    # Вывод списка всех авторов
+    print("\nСписок всех авторов:")
+    for author in authors:
+        author.display_info()
+
+    # Вывод списка русских авторов
+    print("\nСписок русских авторов:")
+    for author in authors:
+        if author.country.lower() == "россия" or author.country.lower() == "российская федерация":
+            author.display_info()
+
+    # Пример использования класса Book
+    book1 = Book("Приключения Тома Сойера")
+    book1.add_piece("Глава 1")
+    book1.add_piece("Глава 2")
+    book1.add_piece("Глава 3")
+    print(f"\nКоличество произведений в книге: {book1.get_piece_count()}")
+    book1.display_book_info()
+
+    # Пример использования класса BookAuthor
+    book_author = BookAuthor("Александр Пушкин", "Россия", "Евгений Онегин")
+    book_author.add_piece("Глава 1")
+    book_author.add_piece("Глава 2")
+    print("\nИнформация о книге и авторе:")
+    book_author.display_book_author_info()
+
+    # Удаление объектов (вызов деструкторов) - для демонстрации
+    del book1
+    del book_author
