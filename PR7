@@ -1,0 +1,126 @@
+# 5.1
+def power(a: 'основание' = 2, x: 'степень') -> float:
+    """Возводит число a в степень x. По умолчанию a = 2.
+
+    Args:
+        a: Основание (по умолчанию 2).
+        x: Степень.
+
+    Returns:
+        Результат возведения a в степень x.
+    """
+    return a ** x
+
+# Пример использования
+print(power(x=3))  # 2 ** 3 = 8
+print(power(a=3, x=2)) # 3 ** 2 = 9
+print(power(a=5, x=0)) # 5 ** 0 = 1
+
+
+# 5.2
+def factorial_recursive(n: 'число для вычисления факториала') -> int:
+    """Рекурсивно вычисляет факториал числа.
+
+    Args:
+        n: Число, для которого вычисляется факториал.
+
+    Returns:
+        Факториал числа n, или -1, если входные данные некорректны.
+    """
+    if not isinstance(n, int):
+        return -1
+    if n < 0:
+        return -1
+    if n == 0:
+        return 1
+    else:
+        return n * factorial_recursive(n - 1)
+
+# Пример использования
+print(factorial_recursive(5)) # 120
+print(factorial_recursive(0)) # 1
+print(factorial_recursive(-1)) # -1
+print(factorial_recursive("abc")) # -1
+
+
+# 5.3
+def calculate_stats(*args: 'набор чисел для вычисления статистики'):
+    """Выводит на экран сумму, среднее, максимум, минимум и количество чисел.
+
+    Args:
+        *args: Набор чисел для вычисления статистики.
+    """
+    if not args:
+        print("Передано 0 чисел.")
+        return
+
+    numbers = []
+    for arg in args:
+        if isinstance(arg, (int, float)):
+            numbers.append(arg)
+        else:
+            print(f"Внимание: аргумент {arg} не является числом и будет проигнорирован.")
+
+    if not numbers:
+        print("Не передано ни одного числового аргумента.")
+        return
+    
+    total = sum(numbers)
+    average = total / len(numbers)
+    maximum = max(numbers)
+    minimum = min(numbers)
+    count = len(numbers)
+
+    print(f"Сумма: {total}")
+    print(f"Среднее: {average}")
+    print(f"Максимум: {maximum}")
+    print(f"Минимум: {minimum}")
+    print(f"Количество: {count}")
+
+# Пример использования
+calculate_stats(1, 2, 3, 4, 5)
+calculate_stats(10, 20, 30)
+calculate_stats()
+calculate_stats(1, 2, "abc", 4, 5) # Один из аргументов - строка
+calculate_stats("abc", "def")
+
+
+
+# 5.4
+def multiply_list(lst: 'список чисел', factor: 'множитель' = -1):
+    """Изменяет значения списка, умножая каждый элемент на factor.
+
+    Args:
+        lst: Список чисел.
+        factor: Множитель (по умолчанию -1).
+    """
+    if not isinstance(lst, list):
+        print("Ошибка: lst должен быть списком.")
+        return
+
+    for i in range(len(lst)):
+        if isinstance(lst[i], (int, float)):
+            lst[i] *= factor
+        else:
+            print(f"Внимание: элемент {lst[i]} с индексом {i} не является числом и будет проигнорирован.")
+
+
+
+# Пример использования
+my_list = [1, 2, 3, 4, 5]
+multiply_list(my_list)
+print(my_list)  # [-1, -2, -3, -4, -5]
+
+my_list = [1, 2, 3, 4, 5]
+multiply_list(my_list, 2)
+print(my_list) # [2, 4, 6, 8, 10]
+
+my_list = [1, 2, "abc", 4, 5]
+multiply_list(my_list)
+print(my_list) # [-1, -2, 'abc', -4, -5]
+
+multiply_list(123) # Ошибка: lst должен быть списком.
+
+
+# 5.5
+y_func = lambda a, x, b: a * x + b
