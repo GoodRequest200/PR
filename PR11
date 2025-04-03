@@ -1,0 +1,121 @@
+import re
+
+# 5.1
+def split_into_sentences(text):
+    """
+    Разбивает строку на предложения, используя регулярное выражение.
+
+    Args:
+      text: Строка для разбиения.
+
+    Returns:
+      Список предложений.
+    """
+    sentences = re.split(r'(?<=\.|\?|!|\.{3})\s', text)
+    return sentences
+
+def print_sentences_newline(sentences):
+    """
+    Выводит каждое предложение из списка с новой строки.
+
+    Args:
+      sentences: Список предложений.
+    """
+    for sentence in sentences:
+        if sentence.strip():  # Избегаем пустых строк
+            print(sentence.strip())
+
+# Пример использования:
+text = "Это первое предложение.  А это второе! И третье... Что вы думаете? Доктор Смит сказал: \"Это очень интересно.\""
+sentences = split_into_sentences(text)
+print_sentences_newline(sentences)
+
+text2 = "Он живет в США. Или в Великобритании? Возможно, он инженер. Например, он работает в IBM."
+sentences2 = split_into_sentences(text2)
+print_sentences_newline(sentences2)
+
+# 5.2
+def replace_bad_words(text):
+    """
+    Заменяет слова "редиска" и "нехороший человек" (в любых склонениях и числе) на "*давайте жить дружно*".
+
+    Args:
+      text: Исходный текст.
+
+    Returns:
+      Текст с заменами.
+    """
+
+    # Паттерны для "редиска"
+    redis_pattern = r"(редиск[а-я]*)"
+
+    # Паттерны для "нехороший человек"
+    bad_person_pattern = r"(нехорош[а-я]*\sчеловек[а-я]*)"
+
+
+    text = re.sub(redis_pattern, "*давайте жить дружно*", text, flags=re.IGNORECASE)
+    text = re.sub(bad_person_pattern, "*давайте жить дружно*", text, flags=re.IGNORECASE)
+
+    return text
+
+# Пример использования:
+text = "Он редИска! Это был нехороший ЧЕЛОВЕК, редИски,  нехорошего человека"
+replaced_text = replace_bad_words(text)
+print(replaced_text)
+
+
+
+# 5.3
+def find_dates(text):
+    """
+    Выделяет из строки все даты в формате дд.мм.гггг (и вариации) и выводит их на экран.
+
+    Args:
+      text: Исходный текст.
+    """
+    date_pattern = r"(0?[1-9]|[12][0-9]|3[01])\.(0?[1-9]|1[0-2])\.(\d{2}|\d{4})"
+    dates = re.findall(date_pattern, text)
+    for date in dates:
+      print(f"{date[0]}.{date[1]}.{date[2]}")  # Format the captured groups
+
+# Пример использования:
+text = "Сегодня 01.01.2023, а вчера было 31.12.22. Также помню дату 5.6.2000 и 15.07.19"
+find_dates(text)
+
+
+# 5.4
+def is_strong_password(password):
+    """
+    Проверяет, является ли пароль надежным.
+
+    Args:
+      password: Пароль для проверки.
+
+    Returns:
+      True, если пароль надежный, False - если нет.
+    """
+    if len(password) < 6:
+        return False
+    if not re.search(r"[0-9]", password):
+        return False
+    if not re.search(r"[a-z]", password):
+        return False
+    if not re.search(r"[A-Z]", password):
+        return False
+    return True
+
+def get_valid_password():
+    """
+    Запрашивает ввод пароля до тех пор, пока он не будет соответствовать требованиям.
+    """
+    while True:
+        password = input("Введите пароль: ")
+        if is_strong_password(password):
+            print("Пароль принят!")
+            return password
+        else:
+            print("Пароль не соответствует требованиям. Попробуйте еще раз.")
+
+# Пример использования:
+valid_password = get_valid_password()
+print(f"Использован пароль: {valid_password}")
