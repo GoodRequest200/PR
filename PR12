@@ -1,0 +1,162 @@
+import os
+import os.path
+
+# 5.1
+def read_and_execute_py_file():
+    """
+    Выводит содержимое файла и, если это .py файл, выполняет его.
+    """
+    filename = input("Введите название файла: ")
+    try:
+        with open(filename, "r", encoding="utf-8") as f:
+            content = f.read()
+            print(content)
+            if os.path.splitext(filename)[1] == ".py":
+                print("Выполняем скрипт...")
+                exec(content)  # Безопасно, если доверяете файлу, но осторожно!
+    except FileNotFoundError:
+        print(f"Файл '{filename}' не найден.")
+    except Exception as e:
+        print(f"Произошла ошибка при обработке файла: {e}")
+
+
+# 5.2
+def write_to_file():
+    """
+    Записывает введенный пользователем текст в файл.
+    """
+    filename = input("Введите название файла: ")
+    file_exists = os.path.exists(filename)
+
+    if file_exists:
+        overwrite = input(
+            "Файл существует. Перезаписать (y/n) или дописать (a/n)? [y/a/n]: "
+        ).lower()
+        if overwrite == "y":
+            mode = "w"
+        elif overwrite == "a":
+            mode = "a"
+        else:
+            print("Операция отменена.")
+            return
+    else:
+        mode = "w"
+
+    try:
+        with open(filename, mode, encoding="utf-8") as f:
+            print("Введите текст (для завершения введите 'end'):")
+            while True:
+                line = input()
+                if line.lower() == "end":
+                    break
+                f.write(line + "\n")
+        print(f"Текст успешно записан в файл '{filename}'.")
+    except Exception as e:
+        print(f"Произошла ошибка при записи в файл: {e}")
+
+
+# 5.3
+def file_operations():
+    """
+    Предлагает пользователю операции с файлом.
+    """
+    filename = input("Введите имя файла: ")
+
+    if not os.path.exists(filename):
+        print(f"Файл '{filename}' не существует.")
+        return
+
+    while True:
+        action = input(
+            "Выберите операцию (v - вывод, d - удаление, r - переименование, q - выход): "
+        ).lower()
+
+        if action == "v":
+            try:
+                with open(filename, "r", encoding="utf-8") as f:
+                    print(f"Содержимое файла '{filename}':")
+                    print(f.read())
+            except Exception as e:
+                print(f"Ошибка при чтении файла: {e}")
+        elif action == "d":
+            try:
+                os.remove(filename)
+                print(f"Файл '{filename}' удален.")
+                return  # Выход из функции после удаления
+            except OSError as e:
+                print(f"Ошибка при удалении файла: {e}")
+        elif action == "r":
+            new_filename = input("Введите новое имя файла: ")
+            try:
+                os.rename(filename, new_filename)
+                print(f"Файл переименован в '{new_filename}'.")
+                return  # Выход из функции после переименования
+            except OSError as e:
+                print(f"Ошибка при переименовании файла: {e}")
+        elif action == "q":
+            return  # Выход из функции
+        else:
+            print("Неверная команда.")
+
+# 5.4
+def delete_txt_files_recursive():
+    """
+    Удаляет все .txt файлы в указанной директории и ее поддиректориях.
+    """
+    directory = input("Введите путь к директории: ")
+    try:
+        for root, _, files in os.walk(directory):
+            for file in files:
+                if file.endswith(".txt"):
+                    filepath = os.path.join(root, file)
+                    try:
+                        os.remove(filepath)
+                        print(f"Удален файл: {filepath}")
+                    except OSError as e:
+                        print(f"Ошибка при удалении файла {filepath}: {e}")
+    except OSError as e:
+        print(f"Ошибка при обходе директории: {e}")
+
+# 5.5
+def write_directory_contents_to_file():
+    """
+    Записывает в файл список поддиректорий и файлов указанной папки с их размерами.
+    """
+    directory = input("Введите путь к директории: ")
+    output_filename = input("Введите имя файла для записи: ")
+
+    try:
+        with open(output_filename, "w", encoding="utf-8") as outfile:
+            for root, dirs, files in os.walk(directory):
+                for dir_name in dirs:
+                    dir_path = os.path.join(root, dir_name)
+                    try:
+                        size_bytes = 0 # размер папки не определен напрямую. Считаем сумму файлов.
+                        for file in os.listdir(dir_path):
+                          file_path = os.path.join(dir_path, file)
+                          if os.path.isfile(file_path):
+                            size_bytes += os.path.getsize(file_path)
+
+                        size_kb = size_bytes / 1024
+                        outfile.write(f"Поддиректория: {dir_path}, Размер: {size_kb:.2f} KB\n")
+                    except OSError as e:
+                        outfile.write(f"Ошибка при получении размера {dir_path}: {e}\n")
+                for file in files:
+                    filepath = os.path.join(root, file)
+                    try:
+                        size_bytes = os.path.getsize(filepath)
+                        size_kb = size_bytes / 1024
+                        outfile.write(f"Файл: {filepath}, Размер: {size_kb:.2f} KB\n")
+                    except OSError as e:
+                        outfile.write(f"Ошибка при получении размера {filepath}: {e}\n")
+        print(f"Информация о содержимом директории записана в файл '{output_filename}'.")
+    except OSError as e:
+        print(f"Ошибка при записи в файл: {e}")
+
+
+# Пример использования функций:
+# read_and_execute_py_file()
+# write_to_file()
+# file_operations()
+# delete_txt_files_recursive()
+# write_directory_contents_to_file()
